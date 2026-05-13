@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(to bottom, #c0d7d8, #f1f7f7, #f7cbca);
+}
+
+.container {
+    display: flex !important;
+    height: 100vh !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* LLLLLLLLLEEEEEEEEEEFFFFFFFFTTTTTTTTTTTT */
+
+.left {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-box {
+    width: 70%;
+    background: #f1f7f7;
+    padding: 50px;
+    border-radius: 30px;
+    box-shadow:
+        15px 15px 30px rgba(93, 107, 107, 0.2),
+        -10px -10px 30px rgba(255, 255, 255, 0.7);
+}
+
+.form-box h2 {
+    margin-bottom: 25px;
+}
+
+form label {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #5d6b6b;
+}
+
+/* INPUT STYLE (Neumorphism) */
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    background: #f1f7f7;
+    border: none;
+    border-radius: 15px;
+    box-shadow:
+        inset 4px 4px 8px rgba(93, 107, 107, 0.2),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 25px;
+    background: #5d6b6b;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #c0d7d8;
+    color: #5d6b6b;
+}
+
+/* RRRRRRRIIIIIGGGGHHHTTTTTTTTT */
+
+.right {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.right::before {
+    content: "";
+    position: absolute;
+    width: 900px;
+    height: 900px;
+    background: linear-gradient(135deg, #c0d7d8, #5d6b6b);
+    border-radius: 50%;
+    right: -259px;
+    top: -150px;
+}
+
+.circle-content {
+    position: relative;
+    color: white;
+    text-align: center;
+    top: 40%;
+}
+
+.circle-content h1 {
+    font-size: 50px;
+}
+
+.ikon {
+    margin-top: 20px;
+    background: white;
+    color: #5d6b6b;
+    font-weight: bold;
+}
