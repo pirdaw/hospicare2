@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TenagaKesehatan;
 use App\Models\User;
 use App\Models\Poli;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,26 +29,26 @@ class TenagaKesehatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // Data akun user
             'nama'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'no_hp'    => 'nullable|string|max:20',
             'alamat'   => 'nullable|string',
-            // Data tenaga kesehatan
             'jenis'    => 'required|in:dokter,perawat,bidan,lainnya',
             'poli_id'  => 'nullable|exists:polis,id',
             'no_str'   => 'nullable|string|max:50',
         ]);
 
-        // Buat akun user dengan role_id = 2 (tenaga kesehatan)
+        // Ambil role_id secara dinamis — tidak hardcode angka
+        $roleId = Role::where('nama_role', 'tenaga_kesehatan')->value('id');
+
         $user = User::create([
             'nama'     => $request->nama,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'no_hp'    => $request->no_hp,
             'alamat'   => $request->alamat,
-            'role_id'  => 2,
+            'role_id'  => $roleId,
         ]);
 
         TenagaKesehatan::create([
@@ -87,7 +88,6 @@ class TenagaKesehatanController extends Controller
         ]);
 
         $tenagaKesehatan->user->update($request->only('nama', 'no_hp', 'alamat'));
-
         $tenagaKesehatan->update($request->only('jenis', 'poli_id', 'no_str'));
 
         return redirect()
@@ -97,8 +97,9 @@ class TenagaKesehatanController extends Controller
 
     public function destroy(TenagaKesehatan $tenagaKesehatan)
     {
-        // Menghapus user akan cascade ke tenaga_kesehatans
+        // Hapus user-nya → otomatis cascade ke tenaga_kesehatans
         $tenagaKesehatan->user->delete();
+
         return redirect()
             ->route('tenaga-kesehatan.index')
             ->with('success', 'Data tenaga kesehatan berhasil dihapus.');
