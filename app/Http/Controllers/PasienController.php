@@ -29,7 +29,7 @@ class PasienController extends Controller
             'agama' => 'required|string|max:50',
             'alamat' => 'required|string',
             'pekerjaan' => 'required|string|max:100',
-            'nohp' => 'required|string|max:20',
+            'no_hp' => 'required|string|max:20',
         ]);
 
         Pasien::create($request->all());
