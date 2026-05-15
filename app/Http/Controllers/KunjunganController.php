@@ -9,19 +9,44 @@ use Illuminate\Http\Request;
 
 class KunjunganController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kunjungans = Kunjungan::with(['pasien', 'poli'])
-            ->latest()
-            ->paginate(15);
+        $query = Kunjungan::with(['pasien', 'poli', 'pemeriksaan'])->latest();
 
-        return view('kunjungan.index', compact('kunjungans'));
+        // Filter search (nama pasien atau NIK)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('pasien', function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('nik', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter tanggal
+        if ($request->filled('tanggal')) {
+            $query->whereDate('tanggal_kunjungan', $request->tanggal);
+        }
+
+        // Filter status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter poli
+        if ($request->filled('poli_id')) {
+            $query->where('poli_id', $request->poli_id);
+        }
+
+        $kunjungans = $query->paginate(15)->withQueryString();
+        $polis       = Poli::orderBy('nama_poli')->get();
+
+        return view('kunjungan.index', compact('kunjungans', 'polis'));
     }
 
     public function create(Request $request)
     {
-        $polis = Poli::all();
-        $pasien = $request->pasien_id
+        $polis  = Poli::orderBy('nama_poli')->get();
+        $pasien = $request->filled('pasien_id')
             ? Pasien::findOrFail($request->pasien_id)
             : null;
 
@@ -31,16 +56,27 @@ class KunjunganController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'pasien_id' => 'required|exists:pasiens,id',
-            'poli_id' => 'required|exists:polis,id',
+            'pasien_id'         => 'required|exists:pasiens,id',
+            'poli_id'           => 'required|exists:polis,id',
             'tanggal_kunjungan' => 'required|date',
-            'keluhan' => 'required|string',
-            'jenis_pembayaran' => 'required|in:BPJS,Umum,Asuransi',
-            'rujukan_dari' => 'nullable|string|max:255',
-            'status' => 'required|in:menunggu,dalam_pemeriksaan,selesai',
+            'keluhan'           => 'required|string|max:1000',
+            'jenis_pembayaran'  => 'required|in:umum,bpjs,swasta',
+            'rujukan_dari'      => 'nullable|string|max:255',
+            'status'            => 'required|in:menunggu,diperiksa,selesai',
+        ], [
+            'pasien_id.required'         => 'Pasien wajib dipilih.',
+            'poli_id.required'           => 'Poli wajib dipilih.',
+            'tanggal_kunjungan.required' => 'Tanggal kunjungan wajib diisi.',
+            'keluhan.required'           => 'Keluhan wajib diisi.',
+            'jenis_pembayaran.required'  => 'Jenis pembayaran wajib dipilih.',
+            'status.required'            => 'Status wajib dipilih.',
         ]);
 
-        $kunjungan = Kunjungan::create($request->all());
+        // Tambahkan user_id otomatis dari user yang login
+        $data              = $request->all();
+        $data['user_id']   = auth()->id();
+
+        $kunjungan = Kunjungan::create($data);
 
         return redirect()
             ->route('kunjungan.show', $kunjungan)
@@ -49,28 +85,37 @@ class KunjunganController extends Controller
 
     public function show(Kunjungan $kunjungan)
     {
-        $kunjungan->load('pasien', 'poli', 'pemeriksaan.tenagaKesehatan.user');
+        $kunjungan->load('pasien', 'poli', 'user', 'pemeriksaan.tenagaKesehatan.user');
         return view('kunjungan.show', compact('kunjungan'));
     }
 
     public function edit(Kunjungan $kunjungan)
     {
-        $polis = Poli::all();
+        $polis = Poli::orderBy('nama_poli')->get();
         return view('kunjungan.edit', compact('kunjungan', 'polis'));
     }
 
     public function update(Request $request, Kunjungan $kunjungan)
     {
         $request->validate([
-            'poli_id' => 'required|exists:polis,id',
+            'poli_id'           => 'required|exists:polis,id',
             'tanggal_kunjungan' => 'required|date',
-            'keluhan' => 'required|string',
-            'jenis_pembayaran' => 'required|in:BPJS,Umum,Asuransi',
-            'rujukan_dari' => 'nullable|string|max:255',
-            'status' => 'required|in:menunggu,dalam_pemeriksaan,selesai',
+            'keluhan'           => 'required|string|max:1000',
+            'jenis_pembayaran'  => 'required|in:umum,bpjs,swasta',
+            'rujukan_dari'      => 'nullable|string|max:255',
+            'status'            => 'required|in:menunggu,diperiksa,selesai',
+        ], [
+            'poli_id.required'           => 'Poli wajib dipilih.',
+            'tanggal_kunjungan.required' => 'Tanggal kunjungan wajib diisi.',
+            'keluhan.required'           => 'Keluhan wajib diisi.',
+            'jenis_pembayaran.required'  => 'Jenis pembayaran wajib dipilih.',
+            'status.required'            => 'Status wajib dipilih.',
         ]);
 
-        $kunjungan->update($request->all());
+        $kunjungan->update($request->only([
+            'poli_id', 'tanggal_kunjungan', 'keluhan',
+            'jenis_pembayaran', 'rujukan_dari', 'status',
+        ]));
 
         return redirect()
             ->route('kunjungan.show', $kunjungan)
@@ -80,6 +125,8 @@ class KunjunganController extends Controller
     public function destroy(Kunjungan $kunjungan)
     {
         $kunjungan->delete();
-        return redirect()->route('kunjungan.index')->with('success', 'Kunjungan berhasil dihapus.');
+        return redirect()
+            ->route('kunjungan.index')
+            ->with('success', 'Kunjungan berhasil dihapus.');
     }
 }

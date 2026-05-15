@@ -7,11 +7,23 @@ use Illuminate\Http\Request;
 
 class PasienController extends Controller
 {
-    public function index()
-    {
-        $pasiens = Pasien::latest()->paginate(15);
-        return view('pasien.index', compact('pasiens'));
+    public function index(Request $request)
+{
+    $query = Pasien::latest();
+
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%")
+              ->orWhere('nik', 'like', "%{$search}%")
+              ->orWhere('no_hp', 'like', "%{$search}%");
+        });
     }
+
+    $pasiens = $query->paginate(15)->withQueryString();
+
+    return view('pasien.index', compact('pasiens'));
+}
 
     public function create()
     {
@@ -32,7 +44,7 @@ class PasienController extends Controller
             'no_hp' => 'required|string|max:20',
         ]);
 
-        Pasien::create($request->all());
+        Pasien::create($request->validated());
 
         return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil ditambahkan.');
     }
@@ -59,7 +71,7 @@ class PasienController extends Controller
             'agama' => 'required|string|max:50',
             'alamat' => 'required|string',
             'pekerjaan' => 'required|string|max:100',
-            'nohp' => 'required|string|max:20',
+            'no_hp' => 'required|string|max:20',
         ]);
 
         $pasien->update($request->all());
