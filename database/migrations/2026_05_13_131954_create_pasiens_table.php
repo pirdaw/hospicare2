@@ -23,11 +23,10 @@ return new class extends Migration
             'AB',
             'O'
             ])->nullable();
-        $table->string('golongandarah');
         $table->string('agama');
         $table->text('alamat');
         $table->string('pekerjaan');
-        $table->string('nohp');
+        $table->string('no_hp');
         $table->timestamps();
     });
 }
