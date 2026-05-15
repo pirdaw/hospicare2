@@ -55,9 +55,20 @@ class PoliController extends Controller
     }
 
     public function destroy(Poli $poli)
-    {
-        $poli->delete();
+{
+    // Cek apakah masih ada kunjungan atau tenaga kesehatan terkait
+    if ($poli->kunjungans()->exists()) {
         return redirect()->route('poli.index')
-            ->with('success', 'Poli berhasil dihapus.');
+            ->with('error', 'Poli tidak bisa dihapus karena masih memiliki data kunjungan.');
     }
+
+    if ($poli->tenagaKesehatans()->exists()) {
+        return redirect()->route('poli.index')
+            ->with('error', 'Poli tidak bisa dihapus karena masih memiliki tenaga kesehatan terdaftar.');
+    }
+
+    $poli->delete();
+    return redirect()->route('poli.index')
+        ->with('success', 'Poli berhasil dihapus.');
+}
 }

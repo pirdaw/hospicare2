@@ -10,17 +10,22 @@ use Illuminate\Http\Request;
 class PemeriksaanController extends Controller
 {
     public function create(Kunjungan $kunjungan)
-    {
-        // Pastikan kunjungan belum ada pemeriksaannya
-        if ($kunjungan->pemeriksaan) {
-            return redirect()
-                ->route('pemeriksaan.show', $kunjungan->pemeriksaan)
-                ->with('info', 'Kunjungan ini sudah memiliki data pemeriksaan.');
-        }
-
-        $kunjungan->load('pasien', 'poli');
-        return view('pemeriksaan.create', compact('kunjungan'));
+{
+    if ($kunjungan->pemeriksaan) {
+        return redirect()
+            ->route('pemeriksaan.show', $kunjungan->pemeriksaan)
+            ->with('info', 'Kunjungan ini sudah memiliki data pemeriksaan.');
     }
+
+    $kunjungan->load('pasien', 'poli');
+
+    // ✅ Tambahkan ini:
+    $tenagaKesehatans = TenagaKesehatan::with('user')
+        ->when($kunjungan->poli_id, fn($q) => $q->where('poli_id', $kunjungan->poli_id))
+        ->get();
+
+    return view('pemeriksaan.create', compact('kunjungan', 'tenagaKesehatans'));
+}
 
     public function store(Request $request)
     {
@@ -39,7 +44,7 @@ class PemeriksaanController extends Controller
             'tanggal_pemeriksaan' => 'required|date',
         ]);
 
-        $pemeriksaan = Pemeriksaan::create($request->all());
+        $pemeriksaan = Pemeriksaan::create($request->validated());
 
         // Update status kunjungan menjadi selesai
         $pemeriksaan->kunjungan->update(['status' => 'selesai']);
@@ -75,7 +80,10 @@ class PemeriksaanController extends Controller
             'tanggal_pemeriksaan' => 'required|date',
         ]);
 
-        $pemeriksaan->update($request->all());
+        $pemeriksaan->update($request->only([
+    'subjective', 'objective', 'suhu', 'tensi',
+    'nadi', 'respirasi', 'assessment', 'plan', 'tanggal_pemeriksaan',
+]));
 
         return redirect()
             ->route('pemeriksaan.show', $pemeriksaan)

@@ -37,13 +37,13 @@ class TenagaKesehatanController extends Controller
         $tenagaKesehatans = $query->paginate(15)->withQueryString();
         $polis             = Poli::orderBy('nama_poli')->get();
 
-        return view('tenaga-kesehatan.index', compact('tenagaKesehatans', 'polis'));
+        return view('tenaga.index', compact('tenagaKesehatans', 'polis'));
     }
 
     public function create()
     {
         $polis = Poli::orderBy('nama_poli')->get();
-        return view('tenaga-kesehatan.create', compact('polis'));
+        return view('tenaga.create', compact('polis'));
     }
 
     public function store(Request $request)
@@ -91,21 +91,21 @@ class TenagaKesehatanController extends Controller
         ]);
 
         return redirect()
-            ->route('tenaga-kesehatan.index')
-            ->with('success', 'Tenaga kesehatan berhasil ditambahkan.');
+    ->route('tenaga-kesehatan.index')
+    ->with('success', 'Tenaga kesehatan berhasil ditambahkan.');
     }
 
     public function show(TenagaKesehatan $tenagaKesehatan)
     {
         $tenagaKesehatan->load('user', 'poli', 'pemeriksaans.kunjungan.pasien');
-        return view('tenaga-kesehatan.show', compact('tenagaKesehatan'));
+        return view('tenaga.show', compact('tenagaKesehatan'));
     }
 
     public function edit(TenagaKesehatan $tenagaKesehatan)
     {
         $polis = Poli::orderBy('nama_poli')->get();
         $tenagaKesehatan->load('user');
-        return view('tenaga-kesehatan.edit', compact('tenagaKesehatan', 'polis'));
+        return view('tenaga.edit', compact('tenagaKesehatan', 'polis'));
     }
 
     public function update(Request $request, TenagaKesehatan $tenagaKesehatan)
@@ -129,7 +129,7 @@ class TenagaKesehatanController extends Controller
         $tenagaKesehatan->update($request->only('jenis', 'poli_id', 'no_str'));
 
         return redirect()
-            ->route('tenaga-kesehatan.index')
+            ->route('tenaga.index')
             ->with('success', 'Data tenaga kesehatan berhasil diperbarui.');
     }
 
@@ -139,7 +139,7 @@ class TenagaKesehatanController extends Controller
         $tenagaKesehatan->user->delete();
 
         return redirect()
-            ->route('tenaga-kesehatan.index')
+            ->route('tenaga.index')
             ->with('success', 'Tenaga kesehatan berhasil dihapus.');
     }
 }
