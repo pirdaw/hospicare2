@@ -58,7 +58,8 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total
                                                 Pasien</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                {{ $stats['total_pasien'] }}</div>
+                                                {{ $stats['total_pasien'] }}
+                                            </div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300"></i></div>
                                     </div>
@@ -74,7 +75,8 @@
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Kunjungan Hari Ini</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                {{ $stats['kunjungan_hari_ini'] }}</div>
+                                                {{ $stats['kunjungan_hari_ini'] }}
+                                            </div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-calendar-day fa-2x text-gray-300"></i>
                                         </div>
@@ -108,7 +110,8 @@
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tenaga
                                                 Kesehatan</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                {{ $stats['total_nakes'] }}</div>
+                                                {{ $stats['total_nakes'] }}
+                                            </div>
                                         </div>
                                         <div class="col-auto"><i class="fas fa-user-md fa-2x text-gray-300"></i></div>
                                     </div>

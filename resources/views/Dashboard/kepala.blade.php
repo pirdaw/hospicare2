@@ -56,7 +56,8 @@
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Kunjungan
                                         Bulan Ini</div>
                                     <div class="h5 font-weight-bold text-gray-800">
-                                        {{ $stats['total_kunjungan_bulan_ini'] }}</div>
+                                        {{ $stats['total_kunjungan_bulan_ini'] }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

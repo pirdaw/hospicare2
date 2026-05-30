@@ -27,21 +27,10 @@
           @csrf
 
           <label>Email Address</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="admin@hospicare.id"
-            value="{{ old('email') }}"
-            required
-          />
+          <input type="email" name="email" placeholder="admin@hospicare.id" value="{{ old('email') }}" required />
 
           <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="********"
-            required
-          />
+          <input type="password" name="password" placeholder="********" required />
 
           <button type="submit">Login</button>
         </form>
