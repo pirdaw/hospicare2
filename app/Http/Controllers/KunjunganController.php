@@ -27,9 +27,10 @@ class KunjunganController extends Controller
             $query->whereDate('tanggal_kunjungan', $request->tanggal);
         }
 
-        // Filter status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
+        // Filter status — bisa dari dropdown ('status') atau shortcut sidebar ('filter')
+        $statusFilter = $request->filled('status') ? $request->status : $request->filter;
+        if ($statusFilter) {
+            $query->where('status', $statusFilter);
         }
 
         // Filter poli

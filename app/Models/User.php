@@ -29,7 +29,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'password' => 'hashed',
+            // 'password' => 'hashed', // dihapus: seeder & controller sudah pakai Hash::make() secara eksplisit
         ];
     }
 

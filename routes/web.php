@@ -51,9 +51,14 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran'])->group(function ()
 });
 
 // ─── KUNJUNGAN ────────────────────────────────────────────────────────────────
-// Petugas: buat & kelola kunjungan | Kepala RM + Admin: lihat semua
+// Semua role termasuk nakes bisa lihat daftar & detail kunjungan
+Route::middleware(['auth', 'role:admin,petugas_pendaftaran,kepala_rm,tenaga_kesehatan'])->group(function () {
+    Route::resource('kunjungan', KunjunganController::class)->only(['index', 'show']);
+});
+
+// Hanya petugas/admin/kepala yang bisa buat, edit, hapus kunjungan
 Route::middleware(['auth', 'role:admin,petugas_pendaftaran,kepala_rm'])->group(function () {
-    Route::resource('kunjungan', KunjunganController::class);
+    Route::resource('kunjungan', KunjunganController::class)->except(['index', 'show']);
 });
 
 // ─── PEMERIKSAAN (SOAP) ───────────────────────────────────────────────────────
