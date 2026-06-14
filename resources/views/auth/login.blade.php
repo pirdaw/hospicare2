@@ -6,16 +6,35 @@
   <title>HOSPICARE — Login</title>
   <link rel="stylesheet" href="{{ asset('assets/css/sb-admin-2.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
+    /* Wrapper password harus block supaya tingginya mengikuti input di dalamnya */
     .password-wrapper {
       position: relative;
+      display: block;
+      margin-top: 5px;
     }
 
-    .password-wrapper input {
-      padding-right: 44px;
+    /* Input password di dalam wrapper — samakan style dengan email input di login.css */
+    .password-wrapper input[type="password"],
+    .password-wrapper input[type="text"] {
       width: 100%;
+      padding: 12px;
+      padding-right: 44px;
+      /* ruang untuk ikon di kanan */
+      margin-top: 0;
+      /* margin sudah di wrapper */
+      background: #f1f7f7;
+      border: none;
+      border-radius: 15px;
+      box-shadow:
+        inset 4px 4px 8px rgba(93, 107, 107, 0.2),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+      outline: none;
+      display: block;
     }
 
+    /* Tombol mata — absolut di tengah vertikal, pojok kanan input */
     .toggle-password {
       position: absolute;
       right: 14px;
@@ -25,20 +44,26 @@
       border: none;
       cursor: pointer;
       padding: 0;
+      margin: 0;
       color: #888;
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      /* Pastikan button tidak ikut di-style oleh selector `button` di login.css */
+      width: auto;
+      border-radius: 0;
     }
 
     .toggle-password:hover {
       color: #4F6F6F;
+      background: none;
     }
 
     .toggle-password:focus {
       outline: none;
+      background: none;
     }
   </style>
 </head>
@@ -73,22 +98,8 @@
             <input type="password" name="password" id="passwordInput" placeholder="********" required />
             <button type="button" class="toggle-password" id="togglePassword" onclick="togglePasswordVisibility()"
               title="Tampilkan/Sembunyikan Password">
-              <!-- ikon mata terbuka (default) -->
-              <svg id="iconEye" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <!-- ikon mata dicoret (saat password terlihat) -->
-              <svg id="iconEyeOff" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                style="display:none;">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8
-                         a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4
-                         c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07
-                         a3 3 0 1 1-4.24-4.24" />
-                <line x1="1" y1="1" x2="23" y2="23" />
-              </svg>
+              <i id="iconEye" class="fas fa-eye"></i>
+              <i id="iconEyeOff" class="fas fa-eye-slash" style="display:none;"></i>
             </button>
           </div>
 
