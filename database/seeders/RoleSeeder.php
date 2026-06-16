@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\TenagaKesehatan;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -64,7 +65,20 @@ class RoleSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ Roles dan akun default berhasil dibuat:');
+        // Buat record tenaga_kesehatans untuk user nakes jika belum ada
+        $nakesUser = User::where('email', 'nakes@hospicare.id')->first();
+        if ($nakesUser) {
+            TenagaKesehatan::firstOrCreate(
+                ['user_id' => $nakesUser->id],
+                [
+                    'jenis' => 'dokter',
+                    'poli_id' => null,
+                    'no_str' => null,
+                ]
+            );
+        }
+
+        $this->command->info('Roles dan akun default berhasil dibuat:');
         $this->command->table(
             ['Role', 'Email', 'Password'],
             [
