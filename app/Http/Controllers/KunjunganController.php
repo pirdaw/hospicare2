@@ -27,9 +27,10 @@ class KunjunganController extends Controller
             $query->whereDate('tanggal_kunjungan', $request->tanggal);
         }
 
-        // Filter status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
+        // Filter status — bisa dari dropdown ('status') atau shortcut sidebar ('filter')
+        $statusFilter = $request->filled('status') ? $request->status : $request->filter;
+        if ($statusFilter) {
+            $query->where('status', $statusFilter);
         }
 
         // Filter poli
@@ -133,4 +134,15 @@ class KunjunganController extends Controller
             ->route('kunjungan.index')
             ->with('success', 'Kunjungan berhasil dihapus.');
     }
+
+    public function cetak(Request $request)
+{
+    $kunjungans = Kunjungan::with(['pasien', 'poli'])
+        ->when($request->filled('tanggal'), fn($q) => $q->whereDate('tanggal_kunjungan', $request->tanggal))
+        ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
+        ->orderBy('tanggal_kunjungan', 'desc')
+        ->get();
+
+    return view('kunjungan.cetak', compact('kunjungans'));
+}
 }
