@@ -5,63 +5,26 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto align-items-center">
 
-        <!-- Info Role -->
+        <!-- Badge Role -->
         <li class="nav-item d-none d-sm-flex align-items-center mr-3">
-            <span class="badge badge-secondary" style="font-size:12px; padding: 6px 12px; border-radius:20px;">
+            <span class="badge badge-pill badge-primary px-3 py-2" style="font-size:11px;letter-spacing:.5px;">
+                <i class="fas fa-shield-alt mr-1"></i>
                 {{ ucfirst(str_replace('_', ' ', Auth::user()->role->nama_role ?? '-')) }}
             </span>
         </li>
 
         <div class="topbar-divider d-none d-sm-block"></div>
 
-        <!-- User Info + Logout -->
-        <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                    {{ Auth::user()->nama }}
-                </span>
-                <i class="fas fa-user-circle fa-fw fa-lg text-gray-400"></i>
-            </a>
-
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <div class="dropdown-header">
-                    <strong>{{ Auth::user()->nama }}</strong><br>
-                    <small class="text-muted">{{ Auth::user()->email }}</small>
-                </div>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                </a>
+        <!-- Info User (tanpa dropdown, tanpa logout) -->
+        <li class="nav-item d-flex align-items-center">
+            <i class="fas fa-user-circle fa-lg text-gray-400 mr-2"></i>
+            <div class="d-none d-lg-block lh-1">
+                <div class="text-gray-800 small font-weight-bold">{{ Auth::user()->nama }}</div>
+                <div class="text-gray-500" style="font-size:11px;">{{ Auth::user()->email }}</div>
             </div>
         </li>
 
     </ul>
 </nav>
-
-<!-- Logout Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Konfirmasi Logout</h5>
-                <button class="close" type="button" data-dismiss="modal">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Apakah kamu yakin ingin keluar dari sesi ini?
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-                <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Logout</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
