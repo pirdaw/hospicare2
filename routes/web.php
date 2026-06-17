@@ -64,6 +64,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran'])->group(function ()
 //  — berisi /kunjungan/{kunjungan} untuk show
 Route::middleware(['auth', 'role:admin,petugas_pendaftaran,kepala_rm,tenaga_kesehatan'])->group(function () {
     Route::get('/kunjungan', [KunjunganController::class, 'index'])->name('kunjungan.index');
+    Route::get('/kunjungan-cetak', [KunjunganController::class, 'cetak'])->name('kunjungan.cetak');
     Route::get('/kunjungan/{kunjungan}', [KunjunganController::class, 'show'])->name('kunjungan.show');
 });
 
