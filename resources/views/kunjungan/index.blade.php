@@ -60,13 +60,16 @@
 
                 <div class="container-fluid">
 
-                    {{-- Header --}}
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Data Kunjungan</h1>
-                        <a href="{{ route('kunjungan.create') }}" class="btn btn-primary btn-sm shadow-sm">
-                            <i class="fas fa-plus fa-sm mr-1"></i> Tambah Kunjungan
-                        </a>
-                    </div>
+                   {{-- Header --}}
+@php $role = Auth::user()->role->nama_role ?? ''; @endphp
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Data Kunjungan</h1>
+    @if(in_array($role, ['admin', 'petugas_pendaftaran']))
+    <a href="{{ route('kunjungan.create') }}" class="btn btn-primary btn-sm shadow-sm">
+        <i class="fas fa-plus fa-sm mr-1"></i> Tambah Kunjungan
+    </a>
+    @endif
+</div>
 
                     {{-- Flash Message --}}
                     @if(session('success'))
@@ -187,30 +190,34 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        <a href="{{ route('kunjungan.show', $k) }}" class="btn btn-info btn-sm"
-                                                            title="Detail">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                        <a href="{{ route('kunjungan.edit', $k) }}"
-                                                            class="btn btn-warning btn-sm" title="Edit">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        @if(!$k->pemeriksaan)
-                                                            <a href="{{ route('pemeriksaan.create', $k) }}"
-                                                                class="btn btn-success btn-sm" title="Input SOAP">
-                                                                <i class="fas fa-notes-medical"></i>
-                                                            </a>
-                                                        @endif
-                                                        <form action="{{ route('kunjungan.destroy', $k) }}" method="POST"
-                                                            class="d-inline"
-                                                            onsubmit="return confirm('Yakin hapus kunjungan pasien {{ addslashes($k->pasien->nama ?? '') }}?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button class="btn btn-danger btn-sm" title="Hapus">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </td>
+    <a href="{{ route('kunjungan.show', $k) }}" class="btn btn-info btn-sm"
+        title="Detail">
+        <i class="fas fa-eye"></i>
+    </a>
+    @if(in_array($role, ['admin', 'petugas_pendaftaran']))
+    <a href="{{ route('kunjungan.edit', $k) }}"
+        class="btn btn-warning btn-sm" title="Edit">
+        <i class="fas fa-edit"></i>
+    </a>
+    @endif
+    @if(in_array($role, ['admin', 'tenaga_kesehatan']) && !$k->pemeriksaan)
+        <a href="{{ route('pemeriksaan.create', $k) }}"
+            class="btn btn-success btn-sm" title="Input SOAP">
+            <i class="fas fa-notes-medical"></i>
+        </a>
+    @endif
+    @if(in_array($role, ['admin', 'petugas_pendaftaran']))
+    <form action="{{ route('kunjungan.destroy', $k) }}" method="POST"
+        class="d-inline"
+        onsubmit="return confirm('Yakin hapus kunjungan pasien {{ addslashes($k->pasien->nama ?? '') }}?')">
+        @csrf
+        @method('DELETE')
+        <button class="btn btn-danger btn-sm" title="Hapus">
+            <i class="fas fa-trash"></i>
+        </button>
+    </form>
+    @endif
+</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

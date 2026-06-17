@@ -150,32 +150,25 @@
             </a>
         </li>
 
-        {{-- ===== KEPALA RM ===== --}}
-    @elseif($role === 'kepala_rm')
+{{-- ===== KEPALA RM ===== --}}
+@elseif($role === 'kepala_rm')
 
-        <div class="sidebar-heading">Rekam Medis</div>
+    <div class="sidebar-heading">Rekam Medis</div>
 
-        <li
-            class="nav-item {{ request()->routeIs('kunjungan.index') || request()->routeIs('kunjungan.show') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('kunjungan.index') }}">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Data Kunjungan</span>
-            </a>
-        </li>
+    <li
+        class="nav-item {{ request()->routeIs('kunjungan.index') || request()->routeIs('kunjungan.show') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('kunjungan.index') }}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Data Kunjungan</span>
+        </a>
+    </li>
 
-        <li class="nav-item {{ request()->routeIs('pasien.index') || request()->routeIs('pasien.show') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('pasien.index') }}">
-                <i class="fas fa-fw fa-users"></i>
-                <span>Data Pasien</span>
-            </a>
-        </li>
-
-        <li class="nav-item {{ request()->routeIs('pemeriksaan.show') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('kunjungan.index', ['filter' => 'selesai']) }}">
-                <i class="fas fa-fw fa-file-medical-alt"></i>
-                <span>Laporan Pemeriksaan</span>
-            </a>
-        </li>
+    <li class="nav-item {{ request()->routeIs('kunjungan.cetak') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('kunjungan.cetak') }}" target="_blank">
+            <i class="fas fa-fw fa-print"></i>
+            <span>Cetak Laporan</span>
+        </a>
+    </li>
 
     @endif
 
@@ -210,10 +203,6 @@
             Logout
         </button>
     </li>
-
-    <div class="text-center d-none d-md-inline mb-2">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
 
 </ul>
 
