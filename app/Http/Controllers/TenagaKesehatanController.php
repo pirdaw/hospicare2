@@ -20,7 +20,7 @@ class TenagaKesehatanController extends Controller
             $search = $request->search;
             $query->whereHas('user', function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -35,7 +35,7 @@ class TenagaKesehatanController extends Controller
         }
 
         $tenagaKesehatans = $query->paginate(15)->withQueryString();
-        $polis             = Poli::orderBy('nama_poli')->get();
+        $polis = Poli::orderBy('nama_poli')->get();
 
         return view('tenaga.index', compact('tenagaKesehatans', 'polis'));
     }
@@ -49,22 +49,22 @@ class TenagaKesehatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'no_hp'    => 'nullable|string|max:20',
-            'alamat'   => 'nullable|string',
-            'jenis'    => 'required|in:dokter,perawat,bidan,lainnya',
-            'poli_id'  => 'nullable|exists:polis,id',
-            'no_str'   => 'nullable|string|max:50',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
+            'jenis' => 'required|in:dokter,perawat,bidan,lainnya',
+            'poli_id' => 'nullable|exists:polis,id',
+            'no_str' => 'nullable|string|max:50',
         ], [
-            'nama.required'     => 'Nama wajib diisi.',
-            'email.required'    => 'Email wajib diisi.',
-            'email.unique'      => 'Email sudah digunakan.',
+            'nama.required' => 'Nama wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.unique' => 'Email sudah digunakan.',
             'password.required' => 'Password wajib diisi.',
-            'password.min'      => 'Password minimal 8 karakter.',
-            'password.confirmed'=> 'Konfirmasi password tidak cocok.',
-            'jenis.required'    => 'Jenis tenaga kesehatan wajib dipilih.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'jenis.required' => 'Jenis tenaga kesehatan wajib dipilih.',
         ]);
 
         // Ambil role_id secara dinamis (tidak hardcode angka)
@@ -75,24 +75,24 @@ class TenagaKesehatanController extends Controller
         }
 
         $user = User::create([
-            'nama'     => $request->nama,
-            'email'    => $request->email,
+            'nama' => $request->nama,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
-            'no_hp'    => $request->no_hp,
-            'alamat'   => $request->alamat,
-            'role_id'  => $roleId,
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat,
+            'role_id' => $roleId,
         ]);
 
         TenagaKesehatan::create([
             'user_id' => $user->id,
-            'jenis'   => $request->jenis,
+            'jenis' => $request->jenis,
             'poli_id' => $request->poli_id,
-            'no_str'  => $request->no_str,
+            'no_str' => $request->no_str,
         ]);
 
         return redirect()
-    ->route('tenaga-kesehatan.index')
-    ->with('success', 'Tenaga kesehatan berhasil ditambahkan.');
+            ->route('tenaga-kesehatan.index')
+            ->with('success', 'Tenaga kesehatan berhasil ditambahkan.');
     }
 
     public function show(TenagaKesehatan $tenagaKesehatan)
@@ -111,14 +111,14 @@ class TenagaKesehatanController extends Controller
     public function update(Request $request, TenagaKesehatan $tenagaKesehatan)
     {
         $request->validate([
-            'nama'    => 'required|string|max:255',
-            'no_hp'   => 'nullable|string|max:20',
-            'alamat'  => 'nullable|string',
-            'jenis'   => 'required|in:dokter,perawat,bidan,lainnya',
+            'nama' => 'required|string|max:255',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
+            'jenis' => 'required|in:dokter,perawat,bidan,lainnya',
             'poli_id' => 'nullable|exists:polis,id',
-            'no_str'  => 'nullable|string|max:50',
+            'no_str' => 'nullable|string|max:50',
         ], [
-            'nama.required'  => 'Nama wajib diisi.',
+            'nama.required' => 'Nama wajib diisi.',
             'jenis.required' => 'Jenis tenaga kesehatan wajib dipilih.',
         ]);
 
@@ -129,7 +129,7 @@ class TenagaKesehatanController extends Controller
         $tenagaKesehatan->update($request->only('jenis', 'poli_id', 'no_str'));
 
         return redirect()
-            ->route('tenaga.index')
+            ->route('tenaga-kesehatan.index')
             ->with('success', 'Data tenaga kesehatan berhasil diperbarui.');
     }
 
@@ -139,7 +139,7 @@ class TenagaKesehatanController extends Controller
         $tenagaKesehatan->user->delete();
 
         return redirect()
-            ->route('tenaga.index')
+            ->route('tenaga-kesehatan.index')
             ->with('success', 'Tenaga kesehatan berhasil dihapus.');
     }
 }

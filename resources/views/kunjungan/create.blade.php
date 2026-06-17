@@ -126,10 +126,11 @@
                         </div>
 
                         {{-- Form Kunjungan --}}
-                       <form action="{{ route('kunjungan.store') }}" method="POST">
-    @csrf
-    <input type="hidden" name="pasien_id" value="{{ $pasien->id }}">
-    <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+                        <form action="{{ route('kunjungan.store') }}" method="POST">
+                            @csrf
+                             
+                            <input type="hidden" name="pasien_id" value="{{ $pasien->id }}">
+                            <input type="hidden" name="user_id" value="{{ Auth::id() }}">
 
                             <div class="form-row">
                                 <div class="col-md-6">
