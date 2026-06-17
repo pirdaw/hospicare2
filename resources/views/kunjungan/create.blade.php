@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Tambah Kunjungan — Hospicare</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <style>
         .sidebar    { background-color: #778d8d !important; }
@@ -126,10 +126,10 @@
                         </div>
 
                         {{-- Form Kunjungan --}}
-                        <form action="{{ route('kunjungan.store') }}" method="POST">
-                            @csrf
-                            
-                            <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+                       <form action="{{ route('kunjungan.store') }}" method="POST">
+    @csrf
+    <input type="hidden" name="pasien_id" value="{{ $pasien->id }}">
+    <input type="hidden" name="user_id" value="{{ Auth::id() }}">
 
                             <div class="form-row">
                                 <div class="col-md-6">
