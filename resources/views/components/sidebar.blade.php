@@ -204,10 +204,6 @@
         </button>
     </li>
 
-    <div class="text-center d-none d-md-inline mb-2">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
 </ul>
 
 {{-- ===== OVERLAY MODAL CUSTOM (tidak bergantung jQuery/Bootstrap JS) ===== --}}

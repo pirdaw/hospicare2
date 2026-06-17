@@ -52,7 +52,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran'])->group(function ()
 
 // ─── KUNJUNGAN ────────────────────────────────────────────────────────────────
 
-// TARUH INI DULU (DI ATAS) — berisi /kunjungan/create
+//  — berisi /kunjungan/create
 Route::middleware(['auth', 'role:admin,petugas_pendaftaran'])->group(function () {
     Route::get('/kunjungan/create', [KunjunganController::class, 'create'])->name('kunjungan.create');
     Route::post('/kunjungan', [KunjunganController::class, 'store'])->name('kunjungan.store');
@@ -61,7 +61,7 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran'])->group(function ()
     Route::delete('/kunjungan/{kunjungan}', [KunjunganController::class, 'destroy'])->name('kunjungan.destroy');
 });
 
-// BARU INI (DI BAWAH) — berisi /kunjungan/{kunjungan} untuk show
+//  — berisi /kunjungan/{kunjungan} untuk show
 Route::middleware(['auth', 'role:admin,petugas_pendaftaran,kepala_rm,tenaga_kesehatan'])->group(function () {
     Route::get('/kunjungan', [KunjunganController::class, 'index'])->name('kunjungan.index');
     Route::get('/kunjungan-cetak', [KunjunganController::class, 'cetak'])->name('kunjungan.cetak');
