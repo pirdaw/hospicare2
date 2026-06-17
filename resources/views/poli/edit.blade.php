@@ -1,83 +1,98 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Edit Poli — Hospicare</title>
-    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="{{ asset('assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <style>
-        .sidebar { background-color: #778d8d !important; }
-        .topbar  { background-color: #f7cbca !important; }
-        .card-header { background-color: #a1bfbc !important; color: #4F6F6F; }
-        .btn-primary { background-color: #f7cbca !important; border-color: #f7cbca !important; }
-        .btn-primary:hover { background-color: #f3b6cf !important; border-color: #f3b6cf !important; }
+        .sidebar {
+            background-color: #778d8d !important;
+        }
+
+        .topbar {
+            background-color: #f7cbca !important;
+        }
+
+        .card-header {
+            background-color: #a1bfbc !important;
+            color: #4F6F6F;
+        }
+
+        .btn-primary {
+            background-color: #f7cbca !important;
+            border-color: #f7cbca !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #f3b6cf !important;
+            border-color: #f3b6cf !important;
+        }
     </style>
 </head>
+
 <body id="page-top">
-<div id="wrapper">
+    <div id="wrapper">
 
-    @include('components.sidebar')
+        @include('components.sidebar')
 
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div id="content">
-            @include('components.navbar')
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                @include('components.navbar')
 
-            <div class="container-fluid">
+                <div class="container-fluid">
 
-                {{-- Header halaman --}}
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Edit Poli</h1>
-                    <a href="{{ route('poli.index') }}" class="btn btn-secondary btn-sm shadow-sm">
-                        <i class="fas fa-arrow-left fa-sm mr-1"></i> Kembali
-                    </a>
-                </div>
-
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold">Form Edit Poli</h6>
+                    {{-- Header halaman --}}
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Edit Poli</h1>
+                        <a href="{{ route('poli.index') }}" class="btn btn-secondary btn-sm shadow-sm">
+                            <i class="fas fa-arrow-left fa-sm mr-1"></i> Kembali
+                        </a>
                     </div>
-                    <div class="card-body">
-                        {{-- method PUT karena ini update --}}
-                        <form action="{{ route('poli.update', $poli) }}" method="POST">
-                            @csrf
-                            @method('PUT')
 
-                            <div class="form-group">
-                                <label for="nama_poli">Nama Poli <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    name="nama_poli"
-                                    id="nama_poli"
-                                    class="form-control @error('nama_poli') is-invalid @enderror"
-                                    value="{{ old('nama_poli', $poli->nama_poli) }}"
-                                    autofocus
-                                >
-                                @error('nama_poli')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold">Form Edit Poli</h6>
+                        </div>
+                        <div class="card-body">
+                            {{-- method PUT karena ini update --}}
+                            <form action="{{ route('poli.update', $poli) }}" method="POST">
+                                @csrf
+                                @method('PUT')
 
-                            <hr>
-                            <div class="d-flex justify-content-end">
-                                <a href="{{ route('poli.index') }}" class="btn btn-secondary mr-2">Batal</a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save mr-1"></i> Simpan Perubahan
-                                </button>
-                            </div>
+                                <div class="form-group">
+                                    <label for="nama_poli">Nama Poli <span class="text-danger">*</span></label>
+                                    <input type="text" name="nama_poli" id="nama_poli"
+                                        class="form-control @error('nama_poli') is-invalid @enderror"
+                                        value="{{ old('nama_poli', $poli->nama_poli) }}" autofocus>
+                                    @error('nama_poli')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                        </form>
+                                <hr>
+                                <div class="d-flex justify-content-end">
+                                    <a href="{{ route('poli.index') }}" class="btn btn-secondary mr-2">Batal</a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save mr-1"></i> Simpan Perubahan
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
+            @include('components.footer')
         </div>
-        @include('components.footer')
     </div>
-</div>
 
-<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
 </body>
+
 </html>
