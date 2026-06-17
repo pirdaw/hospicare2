@@ -8,22 +8,22 @@ use Illuminate\Http\Request;
 class PasienController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Pasien::latest();
+    {
+        $query = Pasien::latest();
 
-    if ($request->filled('search')) {
-        $search = $request->search;
-        $query->where(function ($q) use ($search) {
-            $q->where('nama', 'like', "%{$search}%")
-              ->orWhere('nik', 'like', "%{$search}%")
-              ->orWhere('no_hp', 'like', "%{$search}%");
-        });
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nik', 'like', "%{$search}%")
+                    ->orWhere('no_hp', 'like', "%{$search}%");
+            });
+        }
+
+        $pasiens = $query->paginate(15)->withQueryString();
+
+        return view('pasien.index', compact('pasiens'));
     }
-
-    $pasiens = $query->paginate(15)->withQueryString();
-
-    return view('pasien.index', compact('pasiens'));
-}
 
     public function create()
     {
@@ -32,7 +32,7 @@ class PasienController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'nama' => 'required|string|max:255',
             'nik' => 'required|string|size:16|unique:pasiens,nik',
             'umur' => 'required|integer|min:0|max:150',
@@ -44,7 +44,7 @@ class PasienController extends Controller
             'no_hp' => 'required|string|max:20',
         ]);
 
-        Pasien::create($request->validated());
+        Pasien::create($data);
 
         return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil ditambahkan.');
     }
@@ -62,7 +62,7 @@ class PasienController extends Controller
 
     public function update(Request $request, Pasien $pasien)
     {
-        $request->validate([
+        $data = $request->validate([
             'nama' => 'required|string|max:255',
             'nik' => 'required|string|size:16|unique:pasiens,nik,' . $pasien->id,
             'umur' => 'required|integer|min:0|max:150',
@@ -74,7 +74,7 @@ class PasienController extends Controller
             'no_hp' => 'required|string|max:20',
         ]);
 
-        $pasien->update($request->all());
+        $pasien->update($data);
 
         return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil diperbarui.');
     }

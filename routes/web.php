@@ -51,9 +51,20 @@ Route::middleware(['auth', 'role:admin,petugas_pendaftaran'])->group(function ()
 });
 
 // ─── KUNJUNGAN ────────────────────────────────────────────────────────────────
-// Petugas: buat & kelola kunjungan | Kepala RM + Admin: lihat semua
-Route::middleware(['auth', 'role:admin,petugas_pendaftaran,kepala_rm'])->group(function () {
-    Route::resource('kunjungan', KunjunganController::class);
+
+// TARUH INI DULU (DI ATAS) — berisi /kunjungan/create
+Route::middleware(['auth', 'role:admin,petugas_pendaftaran'])->group(function () {
+    Route::get('/kunjungan/create', [KunjunganController::class, 'create'])->name('kunjungan.create');
+    Route::post('/kunjungan', [KunjunganController::class, 'store'])->name('kunjungan.store');
+    Route::get('/kunjungan/{kunjungan}/edit', [KunjunganController::class, 'edit'])->name('kunjungan.edit');
+    Route::put('/kunjungan/{kunjungan}', [KunjunganController::class, 'update'])->name('kunjungan.update');
+    Route::delete('/kunjungan/{kunjungan}', [KunjunganController::class, 'destroy'])->name('kunjungan.destroy');
+});
+
+// BARU INI (DI BAWAH) — berisi /kunjungan/{kunjungan} untuk show
+Route::middleware(['auth', 'role:admin,petugas_pendaftaran,kepala_rm,tenaga_kesehatan'])->group(function () {
+    Route::get('/kunjungan', [KunjunganController::class, 'index'])->name('kunjungan.index');
+    Route::get('/kunjungan/{kunjungan}', [KunjunganController::class, 'show'])->name('kunjungan.show');
 });
 
 // ─── PEMERIKSAAN (SOAP) ───────────────────────────────────────────────────────
